@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — PixelMotion AI</title>
+<meta name="description" content="Learn about PixelMotion AI — the free image to video generator powered by artificial intelligence.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05050f;--card:#0f0f22;--border:rgba(255,255,255,0.07);--accent:#00f0ff;--accent2:#a855f7;--text:#eeeeff;--text2:#aaaacc;--muted:#606080;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(0,240,255,0.06) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 85% 75%,rgba(168,85,247,0.07) 0%,transparent 65%);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,15,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;}
+.logo em{font-style:normal;-webkit-text-fill-color:var(--text);font-weight:400;}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;}
+.nav-links a:hover{color:var(--text);}
+.nav-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000!important;-webkit-text-fill-color:#000!important;font-weight:700!important;padding:9px 22px;border-radius:100px;}
+.page-content{max-width:780px;margin:0 auto;padding:120px 24px 80px;position:relative;z-index:1;}
+.page-badge{display:inline-block;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.18);border-radius:100px;padding:6px 18px;font-size:13px;color:var(--accent);font-weight:500;margin-bottom:20px;}
+h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-1.5px;margin-bottom:24px;line-height:1.1;}
+.grad{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lead{font-size:18px;color:var(--text2);line-height:1.8;margin-bottom:48px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);}
+.card h2{font-family:'Syne',sans-serif;font-weight:700;font-size:20px;margin-bottom:12px;}
+.card p{color:var(--text2);font-size:15px;line-height:1.8;}
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
+.value-item{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.value-icon{font-size:28px;margin-bottom:10px;}
+.value-item h3{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;}
+.value-item p{color:var(--text2);font-size:13px;line-height:1.65;}
+footer{margin-top:72px;border-top:1px solid var(--border);padding:32px 48px;position:relative;z-index:1;}
+.footer-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:14px;}
+.footer-links a:hover{color:var(--text);}
+.footer-copy{color:var(--muted);font-size:13px;}
+@media(max-width:768px){nav{padding:0 20px;}.nav-links{display:none;}.values-grid{grid-template-columns:1fr;}footer{padding:24px 20px;}.footer-inner{flex-direction:column;text-align:center;}.footer-links{justify-content:center;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Pixel<em>Motion</em> AI</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="index.html" class="nav-btn">Try Free →</a></li>
+  </ul>
+</nav>
+
+<div class="page-content">
+  <div class="page-badge">About Us</div>
+  <h1>We Make AI <span class="grad">Free for Everyone</span></h1>
+  <p class="lead">PixelMotion AI was built with one simple mission — to give everyone access to powerful AI video generation, completely free of cost. No credit card. No account. No limits.</p>
+
+  <div class="card">
+    <h2>🎯 Our Mission</h2>
+    <p>We believe that powerful AI tools should not be locked behind expensive subscriptions. PixelMotion AI is our commitment to making AI video generation accessible to every creator, student, business, and individual around the world — regardless of their budget.</p>
+  </div>
+
+  <div class="card">
+    <h2>🚀 How We Started</h2>
+    <p>PixelMotion AI started as a passion project to solve a real problem — existing AI video tools were either too expensive or too complicated. We combined cutting-edge AI models with a simple, beautiful interface to create something anyone can use in seconds.</p>
+  </div>
+
+  <div class="card">
+    <h2>💡 How We Stay Free</h2>
+    <p>We keep PixelMotion AI free by displaying non-intrusive advertisements and accepting optional donations from users who love the tool. Every coffee bought and every ad viewed helps us keep our servers running so you can create amazing videos for free.</p>
+  </div>
+
+  <div class="values-grid">
+    <div class="value-item"><div class="value-icon">🆓</div><h3>Free Forever</h3><p>No hidden charges, no paywalls. We are committed to keeping core features free forever.</p></div>
+    <div class="value-item"><div class="value-icon">🔒</div><h3>Privacy First</h3><p>Your images are never stored. They are processed and deleted immediately after video generation.</p></div>
+    <div class="value-item"><div class="value-icon">⚡</div><h3>Always Improving</h3><p>We constantly upgrade our AI models to give you better, faster, higher quality videos.</p></div>
+    <div class="value-item"><div class="value-icon">🌍</div><h3>Global Community</h3><p>Used by creators in 50+ countries. We are proud to serve a global community of creators.</p></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="logo">Pixel<em>Motion</em> AI</a>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="contact.html">Contact</a>
+      <a href="blog.html">Blog</a>
+    </div>
+    <div class="footer-copy">© 2025 PixelMotion AI</div>
+  </div>
+</footer>
+</body>
+</html>

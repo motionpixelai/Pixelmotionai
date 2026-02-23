@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — PixelMotion AI</title>
+<meta name="description" content="Learn about AI video generation, tips, tricks and tutorials on PixelMotion AI Blog.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05050f;--card:#0f0f22;--border:rgba(255,255,255,0.07);--accent:#00f0ff;--accent2:#a855f7;--accent3:#ff4d8d;--text:#eeeeff;--text2:#aaaacc;--muted:#606080;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(0,240,255,0.06) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 85% 75%,rgba(168,85,247,0.07) 0%,transparent 65%);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(5,5,15,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;}
+.logo em{font-style:normal;-webkit-text-fill-color:var(--text);font-weight:400;}
+.back-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);text-decoration:none;padding:9px 20px;border-radius:100px;font-size:14px;}
+.page-content{max-width:900px;margin:0 auto;padding:120px 24px 80px;position:relative;z-index:1;}
+.page-badge{display:inline-block;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.18);border-radius:100px;padding:6px 18px;font-size:13px;color:var(--accent);font-weight:500;margin-bottom:20px;}
+h1{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.sub{color:var(--text2);font-size:16px;margin-bottom:48px;}
+.blog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.blog-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform 0.3s,border-color 0.3s;cursor:pointer;}
+.blog-card:hover{transform:translateY(-5px);border-color:rgba(0,240,255,0.18);}
+.blog-card.featured{grid-column:1/-1;}
+.blog-thumb{height:200px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
+.blog-card.featured .blog-thumb{height:260px;}
+.blog-category{position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.7);border:1px solid var(--border);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.blog-body{padding:24px;}
+.blog-date{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.blog-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;line-height:1.3;margin-bottom:10px;}
+.blog-card.featured .blog-title{font-size:24px;}
+.blog-excerpt{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:16px;}
+.blog-read{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:13px;font-weight:600;}
+.blog-read:hover{text-decoration:underline;}
+/* ARTICLE VIEW */
+.article{display:none;max-width:720px;margin:0 auto;}
+.article.active{display:block;}
+.article-back{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);padding:9px 20px;border-radius:100px;font-size:14px;cursor:pointer;margin-bottom:32px;display:inline-flex;align-items:center;gap:8px;}
+.article h1{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;line-height:1.2;}
+.article-meta{color:var(--muted);font-size:14px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.article p{color:var(--text2);font-size:16px;line-height:1.9;margin-bottom:20px;}
+.article h2{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;margin:32px 0 14px;color:var(--text);}
+.article ul{padding-left:20px;margin-bottom:20px;}
+.article li{color:var(--text2);font-size:16px;line-height:1.8;margin-bottom:6px;}
+.article-cta{background:var(--card);border:1px solid rgba(0,240,255,0.15);border-radius:16px;padding:28px;text-align:center;margin-top:40px;}
+.article-cta h3{font-family:'Syne',sans-serif;font-weight:700;font-size:20px;margin-bottom:10px;}
+.article-cta p{color:var(--text2);font-size:14px;margin-bottom:18px;}
+.btn-try{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:100px;padding:12px 28px;color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;text-decoration:none;}
+footer{margin-top:72px;border-top:1px solid var(--border);padding:32px 48px;}
+.footer-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:14px;}
+.footer-copy{color:var(--muted);font-size:13px;}
+@media(max-width:768px){nav{padding:0 20px;}.blog-grid{grid-template-columns:1fr;}.blog-card.featured{grid-column:1;}.blog-card.featured .blog-title{font-size:20px;}footer{padding:24px 20px;}.footer-inner{flex-direction:column;text-align:center;}.footer-links{justify-content:center;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Pixel<em>Motion</em> AI</a>
+  <a href="index.html" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="page-content">
+
+  <!-- BLOG LIST -->
+  <div id="blogList">
+    <div class="page-badge">Blog</div>
+    <h1>AI Video Tips & Tutorials</h1>
+    <p class="sub">Learn how to get the best results from AI video generation</p>
+
+    <div class="blog-grid">
+
+      <!-- Article 1 — Featured -->
+      <div class="blog-card featured" onclick="openArticle('a1')">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#0a1628,#1a0535);">
+          🎬
+          <span class="blog-category" style="color:var(--accent)">Tutorial</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">January 15, 2025 • 5 min read</div>
+          <div class="blog-title">How to Write the Perfect AI Video Prompt — Complete Guide</div>
+          <div class="blog-excerpt">The quality of your AI video depends almost entirely on your prompt. Learn the exact formula top creators use to get stunning, cinematic results every time.</div>
+          <span class="blog-read">Read Article →</span>
+        </div>
+      </div>
+
+      <!-- Article 2 -->
+      <div class="blog-card" onclick="openArticle('a2')">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#0a2010,#1a3520);">
+          📱
+          <span class="blog-category" style="color:#00e676">Tips</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">January 20, 2025 • 4 min read</div>
+          <div class="blog-title">5 Best Ways to Use AI Videos for Instagram Reels & TikTok</div>
+          <div class="blog-excerpt">Discover how creators are going viral using AI-generated videos. These simple tips will transform your social media presence.</div>
+          <span class="blog-read">Read Article →</span>
+        </div>
+      </div>
+
+      <!-- Article 3 -->
+      <div class="blog-card" onclick="openArticle('a3')">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#1a0a20,#2a1535);">
+          🆚
+          <span class="blog-category" style="color:var(--accent2)">Comparison</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">January 25, 2025 • 6 min read</div>
+          <div class="blog-title">Free vs Paid AI Video Tools — Is Free Good Enough in 2025?</div>
+          <div class="blog-excerpt">We compared the top free and paid AI video generators. The results may surprise you — free tools have come a long way!</div>
+          <span class="blog-read">Read Article →</span>
+        </div>
+      </div>
+
+      <!-- Article 4 -->
+      <div class="blog-card" onclick="openArticle('a4')">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#1a0a0a,#351515);">
+          🎨
+          <span class="blog-category" style="color:var(--accent3)">Creative</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">February 1, 2025 • 3 min read</div>
+          <div class="blog-title">10 Creative Ideas for AI Image-to-Video You Haven't Tried Yet</div>
+          <div class="blog-excerpt">From product photography to travel memories — here are 10 creative ways to use AI video generation that most people haven't discovered yet.</div>
+          <span class="blog-read">Read Article →</span>
+        </div>
+      </div>
+
+      <!-- Article 5 -->
+      <div class="blog-card" onclick="openArticle('a5')">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#0a1520,#152535);">
+          💰
+          <span class="blog-category" style="color:#ffb300">Business</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">February 5, 2025 • 5 min read</div>
+          <div class="blog-title">How to Make Money with AI Videos in 2025 — Beginner Guide</div>
+          <div class="blog-excerpt">AI video creation is a goldmine for freelancers and content creators. Here's exactly how to turn your AI video skills into a real income stream.</div>
+          <span class="blog-read">Read Article →</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARTICLES -->
+  <div class="article" id="a1">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div class="blog-date">January 15, 2025 • 5 min read</div>
+    <h1>How to Write the Perfect AI Video Prompt</h1>
+    <div class="article-meta">By PixelMotion AI Team</div>
+    <p>The most common mistake people make with AI video generation is writing vague, short prompts. The AI needs detailed instructions to create exactly what you have in mind.</p>
+    <h2>The Perfect Prompt Formula</h2>
+    <p>A great prompt has four parts: <strong>Subject + Motion + Camera + Style</strong>. Let's break each down:</p>
+    <ul>
+      <li><strong>Subject:</strong> What is in your image? (mountains, person, ocean)</li>
+      <li><strong>Motion:</strong> What should move? (clouds drift, waves roll, leaves sway)</li>
+      <li><strong>Camera:</strong> How does the camera move? (slow zoom in, pan left, steady)</li>
+      <li><strong>Style:</strong> What is the mood? (cinematic, dreamy, dramatic, peaceful)</li>
+    </ul>
+    <h2>Good vs Bad Prompts</h2>
+    <p><strong>Bad:</strong> "Make it move"</p>
+    <p><strong>Good:</strong> "Clouds drift slowly across the mountain peaks, gentle wind moves through the pine trees, slow cinematic zoom in, golden hour warm light, peaceful and majestic mood"</p>
+    <h2>Pro Tips</h2>
+    <ul>
+      <li>Use descriptive adjectives (gentle, dramatic, soft, powerful)</li>
+      <li>Mention lighting conditions (golden hour, blue hour, overcast)</li>
+      <li>Describe the camera movement specifically</li>
+      <li>Include the overall mood or emotion</li>
+      <li>Aim for 50-150 characters for best results</li>
+    </ul>
+    <div class="article-cta">
+      <h3>Ready to Try It?</h3>
+      <p>Use these tips with PixelMotion AI — completely free!</p>
+      <a href="index.html" class="btn-try">Try Free Now →</a>
+    </div>
+  </div>
+
+  <div class="article" id="a2">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div class="blog-date">January 20, 2025 • 4 min read</div>
+    <h1>5 Best Ways to Use AI Videos for Social Media</h1>
+    <div class="article-meta">By PixelMotion AI Team</div>
+    <p>AI-generated videos are changing the game for social media creators. Here are the five most effective ways to use them for maximum engagement.</p>
+    <h2>1. Transform Product Photos into Videos</h2>
+    <p>Have a product photo? Turn it into a dynamic video ad. Add subtle motion effects to make your product come alive — perfect for Instagram Shopping and Facebook Ads.</p>
+    <h2>2. Create Stunning Travel Content</h2>
+    <p>Turn your travel photos into cinematic videos. Add wind effects, moving clouds, or golden hour glow to transform an ordinary photo into an extraordinary video.</p>
+    <h2>3. Nature & Landscape Content</h2>
+    <p>Nature content performs extremely well on all platforms. Add ocean waves, swaying trees, or falling rain to nature photos for beautiful, shareable content.</p>
+    <h2>4. Real Estate Showcases</h2>
+    <p>Make property photos more engaging by adding subtle zoom effects and smooth camera movements. Perfect for real estate agents and rental listings.</p>
+    <h2>5. Art & Illustration Animation</h2>
+    <p>Bring your artwork and illustrations to life with gentle movement effects. Digital artists are seeing massive engagement boosts with animated versions of their art.</p>
+    <div class="article-cta">
+      <h3>Start Creating Today!</h3>
+      <p>Create stunning social media videos for free with PixelMotion AI.</p>
+      <a href="index.html" class="btn-try">Try Free Now →</a>
+    </div>
+  </div>
+
+  <div class="article" id="a3">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div class="blog-date">January 25, 2025 • 6 min read</div>
+    <h1>Free vs Paid AI Video Tools in 2025</h1>
+    <div class="article-meta">By PixelMotion AI Team</div>
+    <p>The AI video generation landscape has changed dramatically. In 2025, free tools are more capable than ever. But how do they stack up against paid alternatives?</p>
+    <h2>What Free Tools Can Do Now</h2>
+    <ul>
+      <li>Generate HD quality videos from images</li>
+      <li>Create smooth, realistic motion effects</li>
+      <li>Support multiple aspect ratios</li>
+      <li>Process in minutes, not hours</li>
+    </ul>
+    <h2>Where Paid Tools Still Win</h2>
+    <ul>
+      <li>Faster generation times (seconds vs minutes)</li>
+      <li>More advanced camera controls</li>
+      <li>Higher resolution outputs (4K)</li>
+      <li>Priority server access</li>
+    </ul>
+    <h2>Our Verdict</h2>
+    <p>For most content creators, social media managers, and small businesses — free AI video tools are more than good enough. Save your money and start with free tools like PixelMotion AI.</p>
+    <div class="article-cta">
+      <h3>See for Yourself!</h3>
+      <p>Try PixelMotion AI free and judge the quality yourself.</p>
+      <a href="index.html" class="btn-try">Try Free Now →</a>
+    </div>
+  </div>
+
+  <div class="article" id="a4">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div class="blog-date">February 1, 2025 • 3 min read</div>
+    <h1>10 Creative AI Video Ideas You Haven't Tried</h1>
+    <div class="article-meta">By PixelMotion AI Team</div>
+    <p>Most people use AI video for the obvious stuff. Here are 10 creative ideas that will make your content stand out.</p>
+    <ul>
+      <li><strong>1. Old Family Photos:</strong> Bring old memories to life with subtle motion</li>
+      <li><strong>2. Book Covers:</strong> Animate book covers for promotional content</li>
+      <li><strong>3. Food Photography:</strong> Add steam rising from hot food</li>
+      <li><strong>4. Fashion Photos:</strong> Add fabric movement to clothing photos</li>
+      <li><strong>5. Architecture:</strong> Add moving clouds behind buildings</li>
+      <li><strong>6. Pet Photos:</strong> Make fur and whiskers move naturally</li>
+      <li><strong>7. Artwork:</strong> Make paintings feel alive with subtle motion</li>
+      <li><strong>8. Event Posters:</strong> Add dynamic effects to promotional materials</li>
+      <li><strong>9. Logo Animation:</strong> Create simple logo reveal animations</li>
+      <li><strong>10. Map Animations:</strong> Animate illustrated maps with weather effects</li>
+    </ul>
+    <div class="article-cta">
+      <h3>Try These Ideas!</h3>
+      <p>Pick one and create your first AI video for free today.</p>
+      <a href="index.html" class="btn-try">Try Free Now →</a>
+    </div>
+  </div>
+
+  <div class="article" id="a5">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div class="blog-date">February 5, 2025 • 5 min read</div>
+    <h1>How to Make Money with AI Videos in 2025</h1>
+    <div class="article-meta">By PixelMotion AI Team</div>
+    <p>AI video generation is creating real income opportunities for people with zero technical skills. Here's exactly how to monetize this skill.</p>
+    <h2>Freelancing Services</h2>
+    <p>Offer AI video creation services on Fiverr, Upwork, or Instagram. Businesses pay $10-100 per video for product animations, real estate showcases, and social media content. Skills needed: zero. Just PixelMotion AI and creativity.</p>
+    <h2>Content Creation</h2>
+    <p>Build a YouTube channel or Instagram page around AI video content. Demonstrate the tool, share before/afters, and monetize through ads and sponsorships once you build an audience.</p>
+    <h2>Stock Video Sales</h2>
+    <p>Create AI videos and sell them on stock footage sites like Shutterstock, Adobe Stock, and Pond5. Nature animations and abstract videos sell consistently.</p>
+    <h2>Social Media Management</h2>
+    <p>Offer social media management to local businesses using AI tools. Create all their video content for a monthly retainer of Rs. 3,000-10,000 per client.</p>
+    <h2>Getting Started Today</h2>
+    <p>Start by creating 10 sample videos with PixelMotion AI. Build a portfolio. Reach out to 5 local businesses. Land your first client. Scale from there.</p>
+    <div class="article-cta">
+      <h3>Start Building Your Portfolio!</h3>
+      <p>Create professional AI videos for free with PixelMotion AI.</p>
+      <a href="index.html" class="btn-try">Try Free Now →</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="logo">Pixel<em>Motion</em> AI</a>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="contact.html">Contact</a>
+      <a href="blog.html">Blog</a>
+    </div>
+    <div class="footer-copy">© 2025 PixelMotion AI</div>
+  </div>
+</footer>
+
+<script>
+function openArticle(id){
+  document.getElementById('blogList').style.display = 'none';
+  document.querySelectorAll('.article').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function closeArticle(){
+  document.querySelectorAll('.article').forEach(a => a.classList.remove('active'));
+  document.getElementById('blogList').style.display = 'block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

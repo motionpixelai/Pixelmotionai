@@ -1,12 +1,7 @@
 {
   "name": "pixelmotionai",
   "version": "1.0.0",
-  "description": "Free Image to Video AI Tool",
-  "main": "index.js",
-  "scripts": {
-    "start": "node api/generate.js"
-  },
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   }
 }

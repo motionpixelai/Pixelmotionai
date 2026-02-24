@@ -2,27 +2,27 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   
   const PIAPI_KEY = process.env.PIAPI_KEY;
-  const taskId = req.query.id;
-
-  if (!taskId) return res.status(400).json({ error: 'No task ID' });
+  const { id } = req.query;
+  
+  if (!id) return res.status(400).json({ error: 'No task ID' });
 
   try {
-    const statusRes = await fetch(`https://api.piapi.ai/api/kling/v1/video/${taskId}`, {
+    const response = await fetch(`https://api.piapi.ai/api/kling/v1/video/${id}`, {
       headers: { 'x-api-key': PIAPI_KEY }
     });
-    const data = await statusRes.json();
-    const status = data?.data?.status;
     
-    if (status === 'completed') {
-      const videoUrl = data?.data?.output?.video_url || 
-                       data?.data?.output?.works?.[0]?.resource?.resource;
-      if (videoUrl) return res.status(200).json({ status: 'succeeded', output: videoUrl });
-      return res.status(200).json({ status: 'failed' });
-    }
-    if (status === 'failed') return res.status(200).json({ status: 'failed' });
-    return res.status(200).json({ status: 'processing' });
+    const data = await response.json();
+    const status = data?.data?.status;
+    const output = data?.data?.output?.works?.[0]?.resource?.resource;
 
-  } catch (e) {
+    if (status === 'succeeded' && output) {
+      return res.json({ status: 'succeeded', output });
+    } else if (status === 'failed') {
+      return res.json({ status: 'failed' });
+    } else {
+      return res.json({ status: 'processing' });
+    }
+  } catch(e) {
     return res.status(500).json({ error: e.message });
   }
 };

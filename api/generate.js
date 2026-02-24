@@ -1,109 +1,63 @@
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
-
-export default async function handler(req, res) {
-  // CORS headers
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  const PIAPI_KEY = process.env.PIAPI_KEY;
+  const IMGBB_KEY = process.env.IMGBB_KEY;
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (!PIAPI_KEY || !IMGBB_KEY) {
+    return res.status(500).json({ error: "Server config error: API keys missing" });
   }
 
   try {
-    const { image, prompt } = req.body;
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const { image, prompt, style, duration } = body;
 
-    if (!image) {
-      return res.status(400).json({ error: 'Image is required' });
-    }
+    if (!image) return res.status(400).json({ error: 'No image provided' });
 
-    const HF_API_KEY = process.env.HF_API_KEY;
-
-    if (!HF_API_KEY) {
-      return res.status(500).json({ error: 'API key not configured' });
-    }
-
-    // Convert base64 to buffer
     const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
-    const imageBuffer = Buffer.from(base64Data, 'base64');
 
-    // Try primary model first
-    let videoData = await tryModel(
-      'stabilityai/stable-video-diffusion-img2vid-xt',
-      imageBuffer,
-      HF_API_KEY
-    );
-
-    // If primary fails, try backup model
-    if (!videoData) {
-      videoData = await tryModel(
-        'damo-vilab/i2vgen-xl',
-        imageBuffer,
-        HF_API_KEY
-      );
-    }
-
-    if (!videoData) {
-      return res.status(503).json({
-        error: 'Server busy',
-        message: 'Our AI servers are busy right now. Please try again in a moment.'
-      });
-    }
-
-    // Return video as base64
-    const videoBase64 = videoData.toString('base64');
-    return res.status(200).json({
-      success: true,
-      video: `data:video/mp4;base64,${videoBase64}`
+    const imgbbRes = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `image=${encodeURIComponent(base64Data)}`
     });
 
-  } catch (error) {
-    console.error('Generation error:', error);
-    return res.status(500).json({
-      error: 'Generation failed',
-      message: 'Something went wrong. Please try again.'
+    const imgbbData = await imgbbRes.json();
+    const imageUrl = imgbbData?.data?.url;
+
+    if (!imageUrl)
+      return res.status(500).json({ error: 'Image upload failed. Try again.' });
+
+    const klingRes = await fetch('https://api.piapi.ai/api/kling/v1/video', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': PIAPI_KEY
+      },
+      body: JSON.stringify({
+        model: 'kling-v1',
+        task_type: 'img2video',
+        input: {
+          image_url: imageUrl,
+          prompt: `${prompt || 'high quality cinematic motion animation'}, ${style || 'cinematic'} style`,
+          duration: parseInt(duration) || 5,
+          aspect_ratio: '16:9'
+        }
+      })
     });
+
+    const klingData = await klingRes.json();
+    const taskId = klingData?.data?.task_id;
+
+    if (!taskId)
+      return res.status(500).json({ error: 'Could not start video generation.' });
+
+    return res.status(200).json({ id: taskId });
+
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
-}
-
-async function tryModel(modelId, imageBuffer, apiKey) {
-  try {
-    const response = await fetch(
-      `https://api-inference.huggingface.co/models/${modelId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/octet-stream',
-        },
-        body: imageBuffer,
-      }
-    );
-
-    if (!response.ok) {
-      console.log(`Model ${modelId} failed:`, response.status);
-      return null;
-    }
-
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('video')) {
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    }
-
-    return null;
-  } catch (err) {
-    console.log(`Model ${modelId} error:`, err.message);
-    return null;
-  }
-}
+};

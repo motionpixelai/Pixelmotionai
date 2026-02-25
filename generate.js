@@ -8,7 +8,18 @@ module.exports = async (req, res) => {
   const IMGBB_KEY = process.env.IMGBB_KEY;
 
   try {
-    const { image, prompt, style, duration } = req.body;
+    let body = req.body;
+
+if (!body || typeof body === "string") {
+  let raw = "";
+  await new Promise(resolve => {
+    req.on("data", chunk => raw += chunk);
+    req.on("end", resolve);
+  });
+  body = raw ? JSON.parse(raw) : {};
+}
+
+const { image, prompt, style, duration } = body;
     if (!image) return res.status(400).json({ error: 'No image provided' });
 
     // Upload to ImgBB

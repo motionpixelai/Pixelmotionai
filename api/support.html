@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support & FAQ — PixelMotion AI</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .content{position:relative;z-index:10;max-width:700px;margin:0 auto;padding:0 24px 60px;}
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:40px;}
+    .cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;}
+    .cat-card:hover{background:rgba(0,229,255,0.06);border-color:rgba(0,229,255,0.2);}
+    .cat-icon{font-size:28px;margin-bottom:8px;}
+    .cat-title{font-size:13px;font-weight:700;color:var(--text);}
+    .search-wrap{position:relative;margin-bottom:32px;}
+    .search-wrap input{width:100%;padding:16px 20px 16px 48px;background:var(--card);border:1px solid var(--border);border-radius:14px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+    .search-wrap input:focus{border-color:var(--cyan);}
+    .search-wrap input::placeholder{color:var(--muted);}
+    .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
+    .contact-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
+    .contact-card .icon{font-size:32px;margin-bottom:12px;}
+    .contact-card h3{font-size:16px;font-weight:700;margin-bottom:8px;}
+    .contact-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+    @media(max-width:480px){.contact-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div id="page-loader"><div class="loader-logo"><b>Pixel</b><span>Motion AI</span></div><div class="loader-bar"></div></div>
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><span class="micon">🏠</span>Home</a>
+  <a href="blog.html"><span class="micon">📝</span>Blog</a>
+  <a href="support.html" class="active"><span class="micon">💬</span>Support</a>
+  <a href="about.html"><span class="micon">👋</span>About Us</a>
+  <a href="contact.html"><span class="micon">📩</span>Contact</a>
+  <a href="privacy.html"><span class="micon">🔒</span>Privacy Policy</a>
+  <a href="terms.html"><span class="micon">📋</span>Terms of Service</a>
+</nav>
+<header>
+  <a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a>
+  <div class="nav-links"><a href="blog.html">Blog</a><a href="support.html" class="active">Support</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()"><i></i><i></i><i></i></button>
+</header>
+
+<div class="page-hero fade-up">
+  <h1>💬 Support <span style="background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">&amp; FAQ</span></h1>
+  <p>Find answers, get help, and learn how to get the most from PixelMotion AI.</p>
+</div>
+
+<div class="content">
+  <!-- SEARCH -->
+  <div class="search-wrap fade-up delay-1">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="Search FAQ..." id="faq-search" oninput="filterFaq()"/>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cat-grid fade-up delay-1">
+    <a class="cat-card" href="#getting-started"><div class="cat-icon">🚀</div><div class="cat-title">Getting Started</div></a>
+    <a class="cat-card" href="#video-gen"><div class="cat-icon">🎬</div><div class="cat-title">Video Generation</div></a>
+    <a class="cat-card" href="#troubleshoot"><div class="cat-icon">🔧</div><div class="cat-title">Troubleshooting</div></a>
+    <a class="cat-card" href="#billing"><div class="cat-icon">💳</div><div class="cat-title">Billing & Plans</div></a>
+  </div>
+
+  <!-- FAQ SECTIONS -->
+  <div id="getting-started">
+    <h2 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:16px;" id="faq-list">🚀 Getting Started</h2>
+    <div class="faq-item faq-searchable" data-text="free cost price account login">
+      <button class="faq-q" onclick="toggleFaq(this)">Is PixelMotion AI really free? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Yes, 100% free! No credit card, no account, no sign-up required. We generate revenue through ads displayed on the site, which means you never have to pay anything.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="how use start image video create">
+      <button class="faq-q" onclick="toggleFaq(this)">How do I create my first video? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Simple! 1) Paste a direct image URL in the "Image URL" field. 2) Describe the animation you want in the prompt. 3) Choose your settings (duration, ratio, quality). 4) Click "Create Cinematic Video" and wait 2–5 minutes for your video!</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="image url link imgur google photos upload">
+      <button class="faq-q" onclick="toggleFaq(this)">Where do I get an image URL? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Upload your image to Imgur.com (free, instant), Google Photos (right click → copy image address), Dropbox (shared link), or any image hosting service. Make sure the URL ends with .jpg, .png, or .webp for best results.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="browser device mobile phone">
+      <button class="faq-q" onclick="toggleFaq(this)">What browsers are supported? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>PixelMotion AI works on all modern browsers — Chrome, Firefox, Safari, Edge. It's also fully mobile-friendly and works great on iPhone, Android, and tablets.</p></div>
+    </div>
+  </div>
+
+  <div id="video-gen" style="margin-top:32px;">
+    <h2 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:16px;">🎬 Video Generation</h2>
+    <div class="faq-item faq-searchable" data-text="time long wait generation minutes">
+      <button class="faq-q" onclick="toggleFaq(this)">How long does generation take? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Typically 2–5 minutes. HD quality with audio enabled may take up to 8 minutes during peak hours. You'll see live progress stages on the screen so you always know what's happening.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="prompt tips best results describe">
+      <button class="faq-q" onclick="toggleFaq(this)">How do I write a good prompt? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Be specific about motion, camera movement, and mood. Good example: "Slow cinematic zoom in, golden hour lighting, leaves gently swaying in breeze." Bad example: "Make it look cool." Include camera angles (close-up, aerial, tracking shot) for best results.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="format image size resolution aspect ratio">
+      <button class="faq-q" onclick="toggleFaq(this)">What image format works best? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Use JPG or PNG, at least 720p resolution. 16:9 aspect ratio gives the best results. If your image isn't 16:9, the AI will crop it automatically. Clear, high-quality photos produce better videos than blurry or compressed images.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="audio sound music effects">
+      <button class="faq-q" onclick="toggleFaq(this)">Should I enable audio generation? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Audio generation adds realistic sound effects and ambient music that matches your video's mood. It takes slightly longer and costs more API credits on our end, but for you it's always free! Try it for nature scenes, action videos, or anything you want to feel immersive.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="download save video mp4">
+      <button class="faq-q" onclick="toggleFaq(this)">How do I download my video? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>After generation, click the "Download HD Video" button. The video saves as an MP4 file to your device. On mobile, tap and hold the video player to save, or use the download button. Videos are typically available for 24–48 hours after creation.</p></div>
+    </div>
+  </div>
+
+  <div id="troubleshoot" style="margin-top:32px;">
+    <h2 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:16px;">🔧 Troubleshooting</h2>
+    <div class="faq-item faq-searchable" data-text="failed error generation problem">
+      <button class="faq-q" onclick="toggleFaq(this)">My video generation failed. What do I do? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>1) Check that your image URL is publicly accessible (open it in a new tab). 2) Make sure your prompt is descriptive. 3) Try a different aspect ratio or duration. 4) If issues persist, wait a few minutes and try again — sometimes the API has temporary high demand.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="stuck pending processing long wait">
+      <button class="faq-q" onclick="toggleFaq(this)">My video is stuck on "Processing" for too long <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>If it's been more than 15 minutes, the request may have timed out. Note your Task ID from the result panel, then start a new generation. HD quality + audio requests take longer during peak hours (usually evening UTC).</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="image url not working invalid">
+      <button class="faq-q" onclick="toggleFaq(this)">Why isn't my image URL working? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Common issues: 1) The URL requires login to view (must be publicly accessible). 2) The image is too large (try compressing it first). 3) The URL doesn't point directly to an image file. Test by opening the URL in a private/incognito browser tab — if you can see the image without logging in, it should work.</p></div>
+    </div>
+  </div>
+
+  <div id="billing" style="margin-top:32px;">
+    <h2 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:16px;">💳 Billing &amp; Plans</h2>
+    <div class="faq-item faq-searchable" data-text="pay cost price money charge">
+      <button class="faq-q" onclick="toggleFaq(this)">Will I ever be charged? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>No, never. PixelMotion AI is completely free and will remain free. We're funded by non-intrusive advertisements shown on the site. We will never add surprise charges or require payment for basic features.</p></div>
+    </div>
+    <div class="faq-item faq-searchable" data-text="premium pro plan upgrade">
+      <button class="faq-q" onclick="toggleFaq(this)">Is there a premium plan? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Currently we don't offer a paid plan — everything is free for everyone. We may introduce an optional premium tier in the future for priority processing and advanced features, but the free tier will always remain available.</p></div>
+    </div>
+  </div>
+
+  <!-- CONTACT OPTIONS -->
+  <div style="margin-top:48px;">
+    <div class="section-header"><h2>Still need help? <span class="grad">We're here</span></h2><p>Our team responds within 24 hours</p></div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="icon">📩</div>
+        <h3>Email Support</h3>
+        <p>Send us a detailed message and we'll help you out</p>
+        <a href="contact.html" class="btn-primary" style="font-size:14px;padding:12px 20px;">Contact Us</a>
+      </div>
+      <div class="contact-card">
+        <div class="icon">📝</div>
+        <h3>Read Our Blog</h3>
+        <p>Tips, tricks, and tutorials for creating amazing videos</p>
+        <a href="blog.html" class="btn-outline" style="font-size:14px;padding:11px 20px;">Visit Blog</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a><p>Turn any image into a stunning cinematic video using AI. Free forever.</p></div>
+    <div class="footer-col"><h4>Product</h4><a href="index.html">Home</a><a href="blog.html">Blog</a><a href="support.html">FAQ</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 PixelMotion AI. All rights reserved.</p></div>
+</footer>
+
+<script>
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('page-loader').classList.add('hidden');},1000);});
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');}
+function toggleFaq(btn){var a=btn.nextElementSibling;var isOpen=a.classList.contains('open');document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.faq-q').forEach(function(el){el.classList.remove('open');});if(!isOpen){a.classList.add('open');btn.classList.add('open');}}
+function filterFaq(){
+  var q=document.getElementById('faq-search').value.toLowerCase();
+  document.querySelectorAll('.faq-searchable').forEach(function(el){
+    var txt=(el.querySelector('.faq-q').textContent+el.getAttribute('data-text')).toLowerCase();
+    el.style.display=txt.includes(q)?'block':'none';
+  });
+}
+</script>
+</body>
+</html>

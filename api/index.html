@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Turn any image into a cinematic video for free using AI. No account needed. HD quality. Powered by Veo 3.1."/>
+  <title>PixelMotion AI — Turn Any Image Into a Cinematic Video</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .stats-bar{position:relative;z-index:10;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .stat-row{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
+    .dot-g{width:10px;height:10px;border-radius:50%;background:var(--green);animation:pg 1.5s infinite;}
+    .dot-y{width:10px;height:10px;border-radius:50%;background:var(--yellow);}
+    @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(0,230,118,0.5);}50%{box-shadow:0 0 0 6px rgba(0,230,118,0);}}
+    .free-badge{position:relative;z-index:10;margin:20px auto 0;max-width:500px;border:1.5px solid var(--border);border-radius:50px;padding:14px 24px;font-size:14px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:10px;justify-content:center;}
+    .free-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
+    .hero{position:relative;z-index:10;padding:36px 24px 24px;text-align:center;}
+    .hero h1{font-family:'Nunito',sans-serif;font-size:clamp(40px,10vw,66px);font-weight:900;line-height:1.1;}
+    .grad{background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;}
+    .hero p{font-size:16px;color:var(--muted);line-height:1.7;max-width:360px;margin:14px auto 0;}
+    .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px;}
+    .pill{display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:50px;font-size:14px;font-weight:700;border:1.5px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text);}
+    .tag-free{background:var(--green);color:#000;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;}
+    .ad-top{position:relative;z-index:10;padding:16px 24px 0;display:flex;justify-content:center;}
+    .trust-section{position:relative;z-index:10;padding:20px 24px 0;}
+    .form-wrap{position:relative;z-index:10;max-width:580px;margin:0 auto;padding:16px;}
+    .tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:14px 14px 0 0;overflow:hidden;}
+    .tab{flex:1;padding:13px;font-size:14px;font-weight:700;background:transparent;border:none;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+    .tab.on{background:rgba(0,229,255,0.08);color:var(--cyan);border-bottom:2px solid var(--cyan);}
+    .fcard{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 20px 20px;padding:20px;}
+    /* URL INPUT */
+    .url-wrap{margin-bottom:14px;}
+    .url-wrap input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
+    .url-wrap input:focus{border-color:var(--cyan);}
+    .url-wrap input::placeholder{color:var(--muted);}
+    #url-prev-wrap{position:relative;margin-top:10px;display:none;}
+    #url-prev{width:100%;max-height:160px;object-fit:cover;border-radius:10px;display:block;}
+    .btn-change-img{position:absolute;top:8px;right:8px;background:rgba(13,13,26,0.85);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:'Space Grotesk',sans-serif;backdrop-filter:blur(6px);}
+    /* DROPZONE */
+    .dropzone{border:2px dashed rgba(0,229,255,0.25);border-radius:14px;padding:30px 16px;text-align:center;cursor:pointer;background:rgba(0,229,255,0.02);position:relative;margin-bottom:14px;display:none;transition:all 0.2s;}
+    .dropzone.show{display:block;}
+    .dropzone:hover{border-color:var(--cyan);background:rgba(0,229,255,0.05);}
+    .dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .dropzone p{font-size:13px;color:var(--muted);margin-top:8px;}
+    #dz-prev-wrap{position:relative;margin-top:12px;display:none;}
+    #dz-prev{max-width:100%;max-height:160px;border-radius:10px;display:block;margin:0 auto;}
+    /* UPLOAD STATUS */
+    .upload-status{display:none;align-items:center;gap:10px;padding:12px 14px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);border-radius:10px;margin-top:10px;font-size:13px;font-weight:600;color:var(--cyan);}
+    .upload-status.show{display:flex;}
+    .upload-status.success{background:rgba(0,230,118,0.06);border-color:rgba(0,230,118,0.2);color:var(--green);}
+    .upload-status.error{background:rgba(255,82,82,0.06);border-color:rgba(255,82,82,0.2);color:var(--error);}
+    /* PROMPT */
+    .prow{position:relative;margin-bottom:14px;}
+    .prow textarea{width:100%;padding:14px 16px 36px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;line-height:1.6;outline:none;resize:none;min-height:88px;transition:border-color 0.2s;}
+    .prow textarea:focus{border-color:var(--purple);}
+    .prow textarea::placeholder{color:var(--muted);}
+    .chars{position:absolute;bottom:10px;right:14px;font-size:11px;color:var(--muted);}
+    .chars.warn{color:var(--warn);}
+    /* SETTINGS */
+    .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+    .sg label{display:block;font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .segs{display:flex;gap:6px;}
+    .seg{flex:1;padding:8px 4px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+    .seg.on{background:rgba(0,229,255,0.12);border-color:var(--cyan);color:var(--cyan);}
+    .seg:hover:not(.on){background:rgba(255,255,255,0.06);color:var(--text);}
+    /* AUDIO */
+    .arow{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;}
+    .arow .al{font-size:14px;font-weight:600;}
+    .arow .al small{display:block;font-size:11px;color:var(--muted);margin-top:1px;font-weight:400;}
+    .tog{position:relative;width:48px;height:26px;cursor:pointer;display:block;flex-shrink:0;}
+    .tog input{opacity:0;width:0;height:0;position:absolute;}
+    .ts{position:absolute;inset:0;border-radius:13px;background:rgba(255,255,255,0.1);transition:0.2s;}
+    .ts::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:white;border-radius:50%;transition:0.2s;}
+    .tog input:checked+.ts{background:var(--cyan);}
+    .tog input:checked+.ts::before{transform:translateX(22px);}
+    /* BUTTON */
+    .btn-gen{width:100%;padding:17px;background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 100%);border:none;border-radius:16px;color:#fff;font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;cursor:pointer;transition:opacity 0.2s,transform 0.15s;box-shadow:0 8px 32px rgba(0,229,255,0.2);}
+    .btn-gen:hover:not(:disabled){opacity:0.9;transform:translateY(-1px);}
+    .btn-gen:active:not(:disabled){transform:scale(0.98);}
+    .btn-gen:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none;background:rgba(255,255,255,0.08);color:var(--muted);}
+    /* RESULT */
+    .res-wrap{position:relative;z-index:10;max-width:580px;margin:0 auto;padding:0 16px 16px;}
+    .rcard{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;}
+    .rtitle{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+    .sbox{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:12px;border:1px solid transparent;}
+    .sp{background:rgba(180,79,255,0.08);border-color:rgba(180,79,255,0.3);color:#c970ff;}
+    .sc{background:rgba(0,229,255,0.08);border-color:rgba(0,229,255,0.3);color:var(--cyan);}
+    .sd{background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.3);color:var(--green);}
+    .se{background:rgba(255,82,82,0.08);border-color:rgba(255,82,82,0.3);color:var(--error);}
+    .pwrap{background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;height:4px;margin-bottom:12px;}
+    .pbar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:8px;transition:width 0.5s ease;}
+    .vid-box{border-radius:14px;overflow:hidden;background:#000;aspect-ratio:16/9;margin-bottom:12px;}
+    .vid-box.r916{aspect-ratio:9/16;max-width:270px;margin:0 auto 12px;}
+    .vid-box video{width:100%;display:block;}
+    .placeholder{aspect-ratio:16/9;background:rgba(255,255,255,0.02);border:2px dashed rgba(255,255,255,0.07);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:13px;}
+    .placeholder svg{opacity:0.2;}
+    .btn-dl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:rgba(0,230,118,0.08);border:1.5px solid rgba(0,230,118,0.3);border-radius:12px;color:var(--green);font-size:14px;font-weight:700;text-decoration:none;transition:background 0.2s;font-family:'Space Grotesk',sans-serif;margin-bottom:10px;}
+    .btn-dl:hover{background:rgba(0,230,118,0.15);color:var(--green);}
+    .cancel-row{display:none;justify-content:center;margin-top:8px;}
+    .cancel-row.show{display:flex;}
+    .tmeta{margin-top:12px;padding:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);display:none;gap:4px;}
+    .tmeta span{color:rgba(255,255,255,0.6);}
+    .ad-mid{position:relative;z-index:10;max-width:580px;margin:0 auto;padding:0 16px 16px;}
+    .faq-section{position:relative;z-index:10;max-width:580px;margin:0 auto;padding:16px;}
+    .feats{position:relative;z-index:10;max-width:580px;margin:0 auto;padding:0 16px 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .fc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;}
+    .fi{font-size:24px;margin-bottom:8px;}.ft{font-size:14px;font-weight:700;margin-bottom:4px;}.fd{font-size:12px;color:var(--muted);line-height:1.5;}
+    @media(max-width:480px){.sgrid{grid-template-columns:1fr;}.feats{grid-template-columns:1fr;}.hero h1{font-size:36px;}}
+  </style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-logo"><b>Pixel</b><span>Motion AI</span></div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="active"><span class="micon">🏠</span>Home</a>
+  <a href="blog.html"><span class="micon">📝</span>Blog</a>
+  <a href="support.html"><span class="micon">💬</span>Support & FAQ</a>
+  <a href="about.html"><span class="micon">👋</span>About Us</a>
+  <a href="contact.html"><span class="micon">📩</span>Contact</a>
+  <a href="privacy.html"><span class="micon">🔒</span>Privacy Policy</a>
+  <a href="terms.html"><span class="micon">📋</span>Terms of Service</a>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a>
+  <div class="nav-links">
+    <a href="blog.html">Blog</a>
+    <a href="support.html">Support</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()"><i></i><i></i><i></i></button>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-row"><div class="dot-g"></div><div class="dot-y"></div><span id="live-users">284 people using right now</span>&nbsp;•</div>
+  <div class="stat-row">⚡ <span id="live-vids">1,847 videos created today</span></div>
+</div>
+
+<!-- FREE BADGE -->
+<div class="free-badge">100% Free — No Account Needed — HD Quality</div>
+
+<!-- HERO -->
+<div class="hero fade-up">
+  <h1>Turn Any<br>Image Into a<br><span class="grad">Cinematic<br>Video</span></h1>
+  <p>Upload a photo, describe the animation, and AI creates a stunning HD video — completely free.</p>
+  <div class="hero-btns">
+    <div class="pill"><span class="tag-free">FREE</span> Free Forever</div>
+    <div class="pill">🎬 HD Quality</div>
+    <div class="pill">⚡ No Login</div>
+  </div>
+</div>
+
+<!-- AD TOP -->
+<div class="ad-top"><div class="ad-slot ad-slot-banner">Advertisement</div></div>
+
+<!-- TRUST BADGES -->
+<div class="trust-section fade-up delay-1">
+  <div class="trust-row">
+    <div class="trust-badge"><span class="ticon">🔒</span>100% Secure</div>
+    <div class="trust-badge"><span class="ticon">✅</span>No Watermark</div>
+    <div class="trust-badge"><span class="ticon">⚡</span>Fast AI</div>
+    <div class="trust-badge"><span class="ticon">🎬</span>HD Quality</div>
+    <div class="trust-badge"><span class="ticon">♾️</span>Unlimited</div>
+    <div class="trust-badge"><span class="ticon">🌍</span>Worldwide</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap fade-up delay-2">
+  <div class="tabs">
+    <button class="tab on" id="t-url" onclick="switchTab('url')">🔗 Image URL</button>
+    <button class="tab" id="t-up" onclick="switchTab('upload')">📁 Upload Image</button>
+  </div>
+  <div class="fcard">
+
+    <!-- URL TAB -->
+    <div id="w-url">
+      <div class="url-wrap">
+        <input type="url" id="image_url" placeholder="https://example.com/your-image.jpg" oninput="prevUrl()"/>
+        <div id="url-prev-wrap">
+          <img id="url-prev" src="" alt="preview"/>
+          <button class="btn-change-img" onclick="changeImage()">✏️ Change</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD TAB -->
+    <div id="w-up" style="display:none;">
+      <div class="dropzone show" id="dropzone">
+        <input type="file" accept="image/*" id="file-in" onchange="handleFile(this)"/>
+        <div style="font-size:36px;">🖼️</div>
+        <p><strong>Tap to upload</strong> or drag &amp; drop<br><small style="font-size:11px;">JPG, PNG, WEBP — Max 32MB</small></p>
+        <div id="dz-prev-wrap">
+          <img id="dz-prev" src="" alt=""/>
+          <button class="btn-change-img" onclick="resetUpload()">✏️ Change</button>
+        </div>
+      </div>
+      <!-- Upload progress status -->
+      <div class="upload-status" id="upload-status">
+        <div class="spin"></div>
+        <span id="upload-status-text">Uploading image...</span>
+      </div>
+    </div>
+
+    <!-- PROMPT -->
+    <div class="prow">
+      <textarea id="prompt" maxlength="500" placeholder="Describe the animation... e.g. 'Ocean waves crash gently, cinematic slow motion, golden hour lighting'" oninput="updChars()"></textarea>
+      <span class="chars" id="char-display"><span id="cc">0</span>/500</span>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="sgrid">
+      <div class="sg"><label>Duration</label><div class="segs"><button class="seg" id="d4" onclick="selDur('4s',this)">4s</button><button class="seg" id="d6" onclick="selDur('6s',this)">6s</button><button class="seg on" id="d8" onclick="selDur('8s',this)">8s</button></div></div>
+      <div class="sg"><label>Aspect Ratio</label><div class="segs"><button class="seg on" id="r16" onclick="selRatio('16:9',this)">16:9</button><button class="seg" id="r9" onclick="selRatio('9:16',this)">9:16</button></div></div>
+      <div class="sg"><label>Quality</label><div class="segs"><button class="seg" id="qf" onclick="selSpeed('veo3.1-video-fast','qf')">Fast</button><button class="seg on" id="qh" onclick="selSpeed('veo3.1-video','qh')">HD</button></div></div>
+      <div class="sg"><label>Resolution</label><div class="segs"><button class="seg on" id="r720" onclick="selRes('720p',this)">720p</button><button class="seg" id="r1080" onclick="selRes('1080p',this)">1080p</button></div></div>
+    </div>
+
+    <!-- AUDIO -->
+    <div class="arow">
+      <div class="al">🎵 Generate Audio<small>AI sound effects &amp; background music</small></div>
+      <label class="tog"><input type="checkbox" id="gen_audio"/><span class="ts"></span></label>
+    </div>
+
+    <button class="btn-gen" id="genBtn" onclick="generate()">✨ Create Cinematic Video — Free</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="res-wrap">
+  <div class="rcard">
+    <div class="rtitle">🎬 Your Video</div>
+    <div id="result">
+      <div class="placeholder"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><polygon points="5 3 19 12 5 21 5 3"/></svg><p>Your cinematic video will appear here</p></div>
+    </div>
+    <div class="cancel-row" id="cancelRow"><button class="btn-danger" onclick="cancelGen()">⛔ Cancel</button></div>
+    <div class="tmeta" id="tmeta"><div>Task: <span id="m-id">—</span></div><div>Status: <span id="m-st">—</span></div><div>Time: <span id="m-tm">—</span></div></div>
+  </div>
+</div>
+
+<!-- AD MID -->
+<div class="ad-mid"><div class="ad-slot" style="height:90px;">Advertisement</div></div>
+
+<!-- FEATURES -->
+<div class="feats fade-up">
+  <div class="fc"><div class="fi">⚡</div><div class="ft">Fast Generation</div><div class="fd">Videos ready in minutes with Google's Veo 3.1 AI</div></div>
+  <div class="fc"><div class="fi">🎵</div><div class="ft">AI Audio</div><div class="fd">Cinematic sound effects &amp; music</div></div>
+  <div class="fc"><div class="fi">🔓</div><div class="ft">No Login</div><div class="fd">100% free, no account, unlimited use</div></div>
+  <div class="fc"><div class="fi">🎬</div><div class="ft">HD Quality</div><div class="fd">Up to 1080p, 4–8 second videos</div></div>
+  <div class="fc"><div class="fi">📱</div><div class="ft">Mobile Friendly</div><div class="fd">Works on any device perfectly</div></div>
+  <div class="fc"><div class="fi">🌍</div><div class="ft">Worldwide</div><div class="fd">Available in every country</div></div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="section-header"><h2><span class="grad">FAQ</span></h2><p>Common questions answered</p></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is it really free? <span class="faq-icon">+</span></button><div class="faq-a"><p>Yes! 100% free. No credit card, no account, no hidden fees. We earn through ads.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How long does generation take? <span class="faq-icon">+</span></button><div class="faq-a"><p>Typically 2–5 minutes. HD quality with audio may take up to 8 minutes. Live progress shown.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I upload my image directly? <span class="faq-icon">+</span></button><div class="faq-a"><p>Yes! Use the "Upload Image" tab — your image is automatically uploaded to our secure image server and then used for video generation.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What image format works best? <span class="faq-icon">+</span></button><div class="faq-a"><p>JPG or PNG, at least 720p resolution. 16:9 aspect ratio gives the best results.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do I download my video? <span class="faq-icon">+</span></button><div class="faq-a"><p>After generation, click "Download HD Video" button. Videos are available for 48 hours.</p></div></div>
+</div>
+
+<!-- AD BOTTOM -->
+<div style="max-width:580px;margin:0 auto;padding:8px 16px 16px;position:relative;z-index:10;"><div class="ad-slot" style="height:90px;">Advertisement</div></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a>
+      <p>Turn any image into a stunning cinematic video using Google's Veo 3.1 AI. Free forever.</p>
+      <div class="social-links" style="margin-top:16px;">
+        <a href="#" title="Twitter">🐦</a><a href="#" title="Instagram">📸</a>
+        <a href="#" title="YouTube">▶️</a><a href="#" title="Discord">💬</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Product</h4><a href="index.html">Home</a><a href="blog.html">Blog</a><a href="support.html">FAQ</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 PixelMotion AI. All rights reserved.</p><p style="color:var(--muted);font-size:11px;">Powered by Google Veo 3.1</p></div>
+</footer>
+
+<!-- SUPPORT FLOAT -->
+<button class="support-float" onclick="toggleSupport()" title="Support">💬</button>
+<div class="support-popup" id="supportPopup">
+  <div class="sp-title">Need Help? 👋</div>
+  <div class="sp-sub">We're here to help!</div>
+  <div class="sp-links">
+    <a href="support.html">📋 FAQ & Support</a>
+    <a href="contact.html">📩 Contact Us</a>
+    <a href="blog.html">📝 Blog & Tips</a>
+  </div>
+</div>
+
+<script>
+// PAGE LOADER
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('page-loader').classList.add('hidden');},1200);});
+
+// MOBILE MENU
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');}
+
+// LIVE STATS
+var users=284,vids=1847;
+setInterval(function(){
+  users+=Math.floor(Math.random()*5)-2; if(users<150)users=150;
+  vids+=Math.floor(Math.random()*3);
+  document.getElementById('live-users').textContent=users.toLocaleString()+' people using right now';
+  document.getElementById('live-vids').textContent=vids.toLocaleString()+' videos created today';
+},4000);
+
+// TAB SWITCH
+var activeTab='url';
+function switchTab(t){
+  activeTab=t;
+  document.getElementById('t-url').classList.toggle('on',t==='url');
+  document.getElementById('t-up').classList.toggle('on',t==='upload');
+  document.getElementById('w-url').style.display=t==='url'?'block':'none';
+  document.getElementById('w-up').style.display=t==='upload'?'block':'none';
+}
+
+// URL PREVIEW
+var prevT;
+function prevUrl(){
+  clearTimeout(prevT);
+  prevT=setTimeout(function(){
+    var u=document.getElementById('image_url').value.trim();
+    var wrap=document.getElementById('url-prev-wrap');
+    var img=document.getElementById('url-prev');
+    if(u){img.src=u;img.onload=function(){wrap.style.display='block';};img.onerror=function(){wrap.style.display='none';};}
+    else{wrap.style.display='none';}
+  },600);
+}
+function changeImage(){document.getElementById('image_url').value='';document.getElementById('url-prev-wrap').style.display='none';document.getElementById('image_url').focus();}
+
+// ── IMAGE UPLOAD via ImgBB ──
+var uploadedImageUrl = null;
+
+function resetUpload(){
+  document.getElementById('file-in').value='';
+  document.getElementById('dz-prev-wrap').style.display='none';
+  document.getElementById('dz-prev').src='';
+  uploadedImageUrl=null;
+  setUploadStatus('','',false);
+}
+
+function setUploadStatus(type, msg, show){
+  var el=document.getElementById('upload-status');
+  var txt=document.getElementById('upload-status-text');
+  el.className='upload-status'+(show?' show':'')+(type?' '+type:'');
+  txt.textContent=msg;
+}
+
+async function handleFile(inp){
+  var f=inp.files[0];
+  if(!f)return;
+
+  // Show image preview immediately
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var prev=document.getElementById('dz-prev');
+    prev.src=e.target.result;
+    document.getElementById('dz-prev-wrap').style.display='block';
+
+    // Now upload to ImgBB
+    uploadToImgBB(e.target.result);
+  };
+  reader.readAsDataURL(f);
+}
+
+async function uploadToImgBB(base64){
+  setUploadStatus('','⏳ Uploading image to server...',true);
+  uploadedImageUrl=null;
+
+  try{
+    var res=await fetch('/api/upload',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image: base64})
+    });
+    var data=await res.json();
+
+    if(!res.ok||!data.success){
+      setUploadStatus('error','❌ Upload failed: '+(data.error||'Please try again'),true);
+      return;
+    }
+
+    uploadedImageUrl=data.url;
+    setUploadStatus('success','✅ Image uploaded successfully!',true);
+
+    // Hide status after 3 seconds
+    setTimeout(function(){setUploadStatus('','',false);},3000);
+
+  }catch(e){
+    setUploadStatus('error','❌ Upload error: '+e.message,true);
+  }
+}
+
+// CHAR COUNTER
+function updChars(){var v=document.getElementById('prompt').value.length;document.getElementById('cc').textContent=v;document.getElementById('char-display').className='chars'+(v>400?' warn':'');}
+
+// SELECTORS
+var dur='8s',ratio='16:9',model='veo3.1-video',res='720p';
+function selDur(v,b){['d4','d6','d8'].forEach(function(i){document.getElementById(i).classList.remove('on');});b.classList.add('on');dur=v;}
+function selRatio(v,b){['r16','r9'].forEach(function(i){document.getElementById(i).classList.remove('on');});b.classList.add('on');ratio=v;}
+function selSpeed(v,id){['qf','qh'].forEach(function(i){document.getElementById(i).classList.remove('on');});document.getElementById(id).classList.add('on');model=v;}
+function selRes(v,b){['r720','r1080'].forEach(function(i){document.getElementById(i).classList.remove('on');});b.classList.add('on');res=v;}
+
+// SUPPORT
+function toggleSupport(){document.getElementById('supportPopup').classList.toggle('open');}
+document.addEventListener('click',function(e){var p=document.getElementById('supportPopup');if(p.classList.contains('open')&&!e.target.closest('.support-float')&&!e.target.closest('.support-popup')){p.classList.remove('open');}});
+
+// FAQ
+function toggleFaq(btn){var a=btn.nextElementSibling;var isOpen=a.classList.contains('open');document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.faq-q').forEach(function(el){el.classList.remove('open');});if(!isOpen){a.classList.add('open');btn.classList.add('open');}}
+
+// ── GENERATE ──
+var poll=null,cancelled=false;
+var stageLabels=['🚀 Initializing request','📡 Connecting to AI server','🧠 AI analyzing your image','🎬 Generating video frames','✨ Encoding & finalizing'];
+
+async function generate(){
+  var prompt=document.getElementById('prompt').value.trim();
+  var imgUrl='';
+
+  if(activeTab==='url'){
+    imgUrl=document.getElementById('image_url').value.trim();
+    if(!imgUrl)return showErr('Please enter a valid image URL!');
+  } else {
+    // Upload tab
+    if(!uploadedImageUrl){
+      if(!document.getElementById('file-in').files[0])return showErr('Please select an image to upload!');
+      return showErr('Image is still uploading... please wait a moment!');
+    }
+    imgUrl=uploadedImageUrl;
+  }
+
+  if(!prompt)return showErr('Please describe the animation you want!');
+  if(poll){clearInterval(poll);poll=null;}
+  cancelled=false;
+  setBtn(true,'⏳ Starting...');
+  showCancel(true);
+  showStages(0);
+
+  try{
+    var r=await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt,image_url:imgUrl,aspect_ratio:ratio,duration:dur,resolution:res,generate_audio:document.getElementById('gen_audio').checked,task_type:model})
+    });
+    var d=await r.json();
+    if(!r.ok)return showErr(d.error||'API error: '+r.status);
+    var tid=d.data&&d.data.task_id;
+    if(!tid)return showErr('No task ID received. Please try again!');
+    document.getElementById('tmeta').style.display='grid';
+    document.getElementById('m-id').textContent=tid;
+    document.getElementById('m-st').textContent='Pending';
+    document.getElementById('m-tm').textContent=new Date().toLocaleTimeString();
+    setBtn(true,'🎬 Generating...');
+    startPoll(tid);
+  }catch(e){showErr('Connection error: '+e.message);}
+}
+
+function startPoll(tid){
+  var attempt=0;
+  poll=setInterval(async function(){
+    if(cancelled){clearInterval(poll);poll=null;return;}
+    attempt++;
+    try{
+      var r=await fetch('/api/status?taskId='+tid);
+      if(!r.ok)return;
+      var d=await r.json();
+      if(d.error)return;
+      var st=d.data&&d.data.status;
+      if(!st)return;
+      document.getElementById('m-st').textContent=st;
+      if(st==='Pending'){showStages(1);setBtn(true,'⏳ In queue... ('+attempt+')');}
+      else if(st==='Processing'||st==='Staged'){
+        if(attempt<5)showStages(2);else if(attempt<10)showStages(3);else showStages(4);
+        setBtn(true,'🎬 Generating... ('+attempt+')');
+      }else if(st==='Completed'){
+        clearInterval(poll);poll=null;showStages(5);showCancel(false);setBtn(false);
+        var out=d.data.output||{};
+        var vurl=out.video_url||out.url||out.video||(out.works&&out.works[0]&&(out.works[0].video_url||out.works[0].url))||null;
+        var ended=d.data.meta&&d.data.meta.ended_at;
+        if(ended)document.getElementById('m-tm').textContent=new Date(ended).toLocaleTimeString();
+        showVideo(vurl,tid);
+      }else if(st==='Failed'){
+        clearInterval(poll);poll=null;showCancel(false);setBtn(false);
+        var em=(d.data.error&&d.data.error.message)||'Generation failed. Please try again.';
+        showErr(em);
+      }
+      if(attempt>=120){clearInterval(poll);poll=null;showCancel(false);setBtn(false);showErr('Timed out (10 min). Task ID: '+tid);}
+    }catch(e){}
+  },5000);
+}
+
+function cancelGen(){cancelled=true;if(poll){clearInterval(poll);poll=null;}showCancel(false);setBtn(false);document.getElementById('result').innerHTML='<div class="sbox se"><span>⛔ Cancelled. Start a new generation!</span></div><div class="placeholder" style="opacity:0.2;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>';}
+
+function showStages(active){
+  var h='<div><div class="pwrap"><div class="pbar" style="width:'+(active/5*100)+'%"></div></div><div class="stages">';
+  for(var i=0;i<stageLabels.length;i++){
+    var cls='stage';if(i<active)cls+=' done';else if(i===active)cls+=' active';
+    h+='<div class="'+cls+'"><div class="stage-icon">'+(i<active?'✓':(i===active?'<div class="spin" style="width:12px;height:12px;border-width:2px;"></div>':''+(i+1)))+'</div>'+stageLabels[i]+'</div>';
+  }
+  h+='</div></div>';
+  document.getElementById('result').innerHTML=h;
+}
+
+function showVideo(vurl,tid){
+  var rc=ratio==='9:16'?'r916':'';
+  var h='<div class="sbox sd"><span>🎉 Your video is ready!</span></div>';
+  if(vurl){
+    h+='<div class="vid-box '+rc+'"><video controls autoplay muted loop playsinline><source src="'+vurl+'" type="video/mp4"/></video></div>';
+    h+='<a href="'+vurl+'" download="pixelmotion-'+tid+'.mp4" target="_blank" class="btn-dl">⬇️ Download HD Video — Free</a>';
+    h+='<p style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;">Share your video</p>';
+    h+='<div class="share-row">';
+    h+='<button class="share-btn share-twitter" onclick="window.open(\'https://twitter.com/intent/tweet?text=Check this AI video!&url='+encodeURIComponent(vurl)+'\',\'_blank\')">🐦 Twitter</button>';
+    h+='<button class="share-btn share-whatsapp" onclick="window.open(\'https://wa.me/?text='+encodeURIComponent('AI video banaya free mein! '+vurl)+'\',\'_blank\')">💬 WhatsApp</button>';
+    h+='<button class="share-btn share-copy" onclick="navigator.clipboard.writeText(\''+vurl+'\').then(function(){alert(\'Copied!\');})">🔗 Copy Link</button>';
+    h+='</div>';
+  }else{
+    h+='<div class="placeholder" style="min-height:120px;"><p style="text-align:center;">Video ready! Task: <strong>'+tid+'</strong></p></div>';
+  }
+  document.getElementById('result').innerHTML=h;
+}
+
+function showErr(msg){document.getElementById('result').innerHTML='<div class="sbox se"><span>❌ '+msg+'</span></div><div class="placeholder" style="opacity:0.2;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>';showCancel(false);setBtn(false);}
+function setBtn(dis,txt){var b=document.getElementById('genBtn');b.disabled=dis;b.textContent=txt||'✨ Create Cinematic Video — Free';}
+function showCancel(show){document.getElementById('cancelRow').className='cancel-row'+(show?' show':'');}
+</script>
+</body>
+</html>

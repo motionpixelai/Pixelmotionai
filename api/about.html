@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — PixelMotion AI</title>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .content{position:relative;z-index:10;max-width:700px;margin:0 auto;padding:0 24px 60px;}
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:24px;}
+    .team-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;}
+    .team-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;}
+    .team-name{font-size:15px;font-weight:700;margin-bottom:4px;}
+    .team-role{font-size:12px;color:var(--muted);}
+    .stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0;}
+    .stat-c{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;}
+    .stat-num{font-family:'Nunito',sans-serif;font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .stat-label{font-size:13px;color:var(--muted);margin-top:4px;}
+    .mission-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin:32px 0;text-align:center;}
+    .mission-box h2{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;margin-bottom:12px;}
+    .mission-box p{font-size:15px;color:var(--muted);line-height:1.8;}
+    @media(max-width:480px){.stat-cards{grid-template-columns:1fr 1fr;}.stat-cards .stat-c:last-child{grid-column:1/-1;}}
+  </style>
+</head>
+<body>
+<div id="page-loader"><div class="loader-logo"><b>Pixel</b><span>Motion AI</span></div><div class="loader-bar"></div></div>
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><span class="micon">🏠</span>Home</a>
+  <a href="blog.html"><span class="micon">📝</span>Blog</a>
+  <a href="support.html"><span class="micon">💬</span>Support</a>
+  <a href="about.html" class="active"><span class="micon">👋</span>About Us</a>
+  <a href="contact.html"><span class="micon">📩</span>Contact</a>
+  <a href="privacy.html"><span class="micon">🔒</span>Privacy Policy</a>
+  <a href="terms.html"><span class="micon">📋</span>Terms of Service</a>
+</nav>
+<header>
+  <a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a>
+  <div class="nav-links">
+    <a href="blog.html">Blog</a><a href="support.html">Support</a>
+    <a href="about.html" class="active">About</a><a href="contact.html">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()"><i></i><i></i><i></i></button>
+</header>
+
+<div class="page-hero fade-up">
+  <h1>👋 About <span style="background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">PixelMotion AI</span></h1>
+  <p>We're on a mission to make professional AI video creation accessible to everyone — for free.</p>
+</div>
+
+<div class="content">
+  <div class="stat-cards fade-up delay-1">
+    <div class="stat-c"><div class="stat-num">2M+</div><div class="stat-label">Videos Created</div></div>
+    <div class="stat-c"><div class="stat-num">180+</div><div class="stat-label">Countries</div></div>
+    <div class="stat-c"><div class="stat-num">100%</div><div class="stat-label">Free Forever</div></div>
+  </div>
+
+  <div class="mission-box fade-up delay-2">
+    <h2>🚀 Our Mission</h2>
+    <p>We believe everyone deserves access to cutting-edge AI tools. PixelMotion AI was built to democratize video creation — giving creators, marketers, students, and dreamers the power to bring their images to life without spending a dime.</p>
+  </div>
+
+  <div class="card fade-up delay-2" style="margin-bottom:24px;">
+    <h3 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:12px;">💡 Our Story</h3>
+    <p style="color:var(--muted);line-height:1.8;font-size:15px;">PixelMotion AI was born from a simple frustration: AI video tools were either expensive, required complex setups, or demanded account creation just to try them. We wanted something different — powerful, instant, and completely free.</p>
+    <br>
+    <p style="color:var(--muted);line-height:1.8;font-size:15px;">We built PixelMotion AI on top of Google's Veo 3.1 model — one of the most advanced AI video generation systems in the world. Our team handles all the technical complexity so you can focus on creating.</p>
+  </div>
+
+  <h3 style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;margin-bottom:8px;position:relative;z-index:10;">🎯 What We Stand For</h3>
+  <div style="display:grid;gap:12px;margin-bottom:32px;" class="fade-up">
+    <div class="card2" style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:24px;">🔓</span>
+      <div><strong>Radical Openness</strong><br><span style="color:var(--muted);font-size:14px;">No paywalls, no accounts, no limits. Everyone deserves professional tools.</span></div>
+    </div>
+    <div class="card2" style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:24px;">🔒</span>
+      <div><strong>Privacy First</strong><br><span style="color:var(--muted);font-size:14px;">We don't store your images or videos. Your creative work stays yours.</span></div>
+    </div>
+    <div class="card2" style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:24px;">⚡</span>
+      <div><strong>Speed & Quality</strong><br><span style="color:var(--muted);font-size:14px;">We optimize for both — fast generation without compromising on HD quality.</span></div>
+    </div>
+    <div class="card2" style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:24px;">🌍</span>
+      <div><strong>Global Access</strong><br><span style="color:var(--muted);font-size:14px;">Available in 180+ countries with no regional restrictions or blocks.</span></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:32px 0;" class="fade-up">
+    <a href="index.html" class="btn-primary" style="font-size:16px;padding:16px 32px;">🎬 Try It Free Now</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="index.html"><b>Pixel</b><span>Motion AI</span></a>
+      <p>Turn any image into a stunning cinematic video using AI. Free forever.</p>
+    </div>
+    <div class="footer-col"><h4>Product</h4><a href="index.html">Home</a><a href="blog.html">Blog</a><a href="support.html">FAQ</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 PixelMotion AI. All rights reserved.</p></div>
+</footer>
+
+<script>
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('page-loader').classList.add('hidden');},1000);});
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('menuOverlay').classList.toggle('open');}
+function closeMenu(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobileMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('open');}
+</script>
+</body>
+</html>

@@ -1,20 +1,23 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" }
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.css", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/generate", "dest": "/api/generate.js" },
     { "src": "/api/status", "dest": "/api/status.js" },
     { "src": "/api/upload", "dest": "/api/upload.js" },
     { "src": "/shared.css", "dest": "/shared.css" },
-    { "src": "/about.html", "dest": "/about.html" },
-    { "src": "/blog.html", "dest": "/blog.html" },
-    { "src": "/contact.html", "dest": "/contact.html" },
-    { "src": "/support.html", "dest": "/support.html" },
-    { "src": "/privacy.html", "dest": "/privacy.html" },
-    { "src": "/terms.html", "dest": "/terms.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/blog", "dest": "/blog.html" },
+    { "src": "/contact", "dest": "/contact.html" },
+    { "src": "/support", "dest": "/support.html" },
+    { "src": "/privacy", "dest": "/privacy.html" },
+    { "src": "/terms", "dest": "/terms.html" },
     { "src": "/", "dest": "/index.html" },
+    { "src": "/(.*)\\.html", "dest": "/$1.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
